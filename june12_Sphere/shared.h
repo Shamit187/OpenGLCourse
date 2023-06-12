@@ -3,63 +3,8 @@
 #include <vector>
 #include <cmath>
 
-std::vector<float> buildUnitPositiveX(int subdivision)
-{
-    const float DEG2RAD = acos(-1) / 180.0f;
-
-    std::vector<float> vertices;
-    float n1[3];        // normal of longitudinal plane rotating along Y-axis
-    float n2[3];        // normal of latitudinal plane rotating along Z-axis
-    float v[3];         // direction vector intersecting 2 planes, n1 x n2
-    float a1;           // longitudinal angle along Y-axis
-    float a2;           // latitudinal angle along Z-axis
-
-    // compute the number of vertices per row, 2^n + 1
-    int pointsPerRow = (int)pow(2, subdivision) + 1;
-
-    // rotate latitudinal plane from 45 to -45 degrees along Z-axis (top-to-bottom)
-    for(unsigned int i = 0; i < pointsPerRow; ++i)
-    {
-        // normal for latitudinal plane
-        // if latitude angle is 0, then normal vector of latitude plane is n2=(0,1,0)
-        // therefore, it is rotating (0,1,0) vector by latitude angle a2
-        a2 = DEG2RAD * (45.0f - 90.0f * i / (pointsPerRow - 1));
-        n2[0] = -sin(a2);
-        n2[1] = cos(a2);
-        n2[2] = 0;
-
-        // rotate longitudinal plane from -45 to 45 along Y-axis (left-to-right)
-        for(unsigned int j = 0; j < pointsPerRow; ++j)
-        {
-            // normal for longitudinal plane
-            // if longitude angle is 0, then normal vector of longitude is n1=(0,0,-1)
-            // therefore, it is rotating (0,0,-1) vector by longitude angle a1
-            a1 = DEG2RAD * (-45.0f + 90.0f * j / (pointsPerRow - 1));
-            n1[0] = -sin(a1);
-            n1[1] = 0;
-            n1[2] = -cos(a1);
-
-            // find direction vector of intersected line, n1 x n2
-            v[0] = n1[1] * n2[2] - n1[2] * n2[1];
-            v[1] = n1[2] * n2[0] - n1[0] * n2[2];
-            v[2] = n1[0] * n2[1] - n1[1] * n2[0];
-
-            // normalize direction vector
-            float scale = 1 / sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
-            v[0] *= scale;
-            v[1] *= scale;
-            v[2] *= scale;
-
-            // add a vertex into array
-            vertices.push_back(v[0]);
-            vertices.push_back(v[1]);
-            vertices.push_back(v[2]);
-        }
-    }
-
-    return vertices;
-}
-
+#define SUBDIVISION 20
+#define RADIUS 1
 
 void reshape(GLsizei width, GLsizei height){
     if(height == 0) height = 1;
@@ -80,19 +25,193 @@ void reshape(GLsizei width, GLsizei height){
 }
 
 void display(){
-    auto x = buildUnitPositiveX(3);
-    for(int i = 0; i < x.size(); i+=3)
-            std::cout << "Vertex: " << x[i] << " " << x[i+1] << " " << x[i+2] << std::endl;
-    int pointsPerRow = (int)pow(2, 3) + 1;
-    int quads = (pointsPerRow - 1)*(pointsPerRow - 1);
-    glPointSize(10);
-    glColor3f(1.0f, 0.0f, 0.0f);
-    glBegin(GL_QUADS);
-        for(int q = 0; q < quads; q++){
-            glVertex3f(x[3*q], x[3*q+1], x[3*q+2]);
-        }
+    
+    glClear(GL_COLOR_BUFFER_BIT);
 
+    glRotatef(90.0f ,1.0f, 0.0f, 0.0f);
+    glColor3f(0.0f, 1.0f, 1.0f);
+    glBegin(GL_QUADS);
+        for(int row = 0; row < SUBDIVISION; row++){
+            for(int col = 0; col < SUBDIVISION; col++){
+                GLfloat theta1 = 45 + row * (90 / SUBDIVISION);
+                GLfloat theta2 = 45 + (row+1) * (90 / SUBDIVISION);
+                GLfloat phi1 = -45 + col * (90 / SUBDIVISION);
+                GLfloat phi2 = -45 + (col+1) * (90 / SUBDIVISION);
+
+                GLfloat x1 = RADIUS * sin(M_PI * phi1/180) * cos(M_PI * theta1/180);
+                GLfloat y1 = RADIUS * sin(M_PI * phi1/180) * cos(M_PI * theta1/180);
+                GLfloat z1 = RADIUS * cos(M_PI * phi1/180);
+
+                GLfloat x2 = RADIUS * sin(M_PI * phi1/180) * cos(M_PI * theta2/180);
+                GLfloat y2 = RADIUS * sin(M_PI * phi1/180) * cos(M_PI * theta2/180);
+                GLfloat z2 = RADIUS * cos(M_PI * phi1/180);
+
+                GLfloat x3 = RADIUS * sin(M_PI * phi2/180) * cos(M_PI * theta2/180);
+                GLfloat y3 = RADIUS * sin(M_PI * phi2/180) * cos(M_PI * theta2/180);
+                GLfloat z3 = RADIUS * cos(M_PI * phi2/180);
+
+                GLfloat x4 = RADIUS * sin(M_PI * phi2/180) * cos(M_PI * theta1/180);
+                GLfloat y4 = RADIUS * sin(M_PI * phi2/180) * cos(M_PI * theta1/180);
+                GLfloat z4 = RADIUS * cos(M_PI * phi2/180);
+
+                
+                glVertex3f(x1, y1, z1);
+                
+                glVertex3f(x2, y2, z2);
+                
+                glVertex3f(x3, y3, z3);
+                
+                glVertex3f(x4, y4, z4);
+
+            }
+        }
     glEnd();
+    glRotatef(-90.0f ,1.0f, 0.0f, 0.0f);
+
+    glRotatef(-90.0f ,1.0f, 0.0f, 0.0f);
+    glColor3f(0.0f, 1.0f, 1.0f);
+    glBegin(GL_QUADS);
+        for(int row = 0; row < SUBDIVISION; row++){
+            for(int col = 0; col < SUBDIVISION; col++){
+                GLfloat theta1 = 45 + row * (90 / SUBDIVISION);
+                GLfloat theta2 = 45 + (row+1) * (90 / SUBDIVISION);
+                GLfloat phi1 = -45 + col * (90 / SUBDIVISION);
+                GLfloat phi2 = -45 + (col+1) * (90 / SUBDIVISION);
+
+                GLfloat x1 = RADIUS * sin(M_PI * phi1/180) * cos(M_PI * theta1/180);
+                GLfloat y1 = RADIUS * sin(M_PI * phi1/180) * cos(M_PI * theta1/180);
+                GLfloat z1 = RADIUS * cos(M_PI * phi1/180);
+
+                GLfloat x2 = RADIUS * sin(M_PI * phi1/180) * cos(M_PI * theta2/180);
+                GLfloat y2 = RADIUS * sin(M_PI * phi1/180) * cos(M_PI * theta2/180);
+                GLfloat z2 = RADIUS * cos(M_PI * phi1/180);
+
+                GLfloat x3 = RADIUS * sin(M_PI * phi2/180) * cos(M_PI * theta2/180);
+                GLfloat y3 = RADIUS * sin(M_PI * phi2/180) * cos(M_PI * theta2/180);
+                GLfloat z3 = RADIUS * cos(M_PI * phi2/180);
+
+                GLfloat x4 = RADIUS * sin(M_PI * phi2/180) * cos(M_PI * theta1/180);
+                GLfloat y4 = RADIUS * sin(M_PI * phi2/180) * cos(M_PI * theta1/180);
+                GLfloat z4 = RADIUS * cos(M_PI * phi2/180);
+
+                
+                glVertex3f(x1, y1, z1);
+                glVertex3f(x2, y2, z2);
+                glVertex3f(x3, y3, z3);
+                glVertex3f(x4, y4, z4);
+
+            }
+        }
+    glEnd();
+    glRotatef(90.0f ,1.0f, 0.0f, 0.0f);
+
+
+    glRotatef(90.0f ,0.0f, 1.0f, 0.0f);
+    glColor3f(0.0f, 1.0f, 1.0f);
+    glBegin(GL_QUADS);
+        for(int row = 0; row < SUBDIVISION; row++){
+            for(int col = 0; col < SUBDIVISION; col++){
+                GLfloat theta1 = 45 + row * (90 / SUBDIVISION);
+                GLfloat theta2 = 45 + (row+1) * (90 / SUBDIVISION);
+                GLfloat phi1 = -45 + col * (90 / SUBDIVISION);
+                GLfloat phi2 = -45 + (col+1) * (90 / SUBDIVISION);
+
+                GLfloat x1 = RADIUS * sin(M_PI * phi1/180) * cos(M_PI * theta1/180);
+                GLfloat y1 = RADIUS * sin(M_PI * phi1/180) * cos(M_PI * theta1/180);
+                GLfloat z1 = RADIUS * cos(M_PI * phi1/180);
+
+                GLfloat x2 = RADIUS * sin(M_PI * phi1/180) * cos(M_PI * theta2/180);
+                GLfloat y2 = RADIUS * sin(M_PI * phi1/180) * cos(M_PI * theta2/180);
+                GLfloat z2 = RADIUS * cos(M_PI * phi1/180);
+
+                GLfloat x3 = RADIUS * sin(M_PI * phi2/180) * cos(M_PI * theta2/180);
+                GLfloat y3 = RADIUS * sin(M_PI * phi2/180) * cos(M_PI * theta2/180);
+                GLfloat z3 = RADIUS * cos(M_PI * phi2/180);
+
+                GLfloat x4 = RADIUS * sin(M_PI * phi2/180) * cos(M_PI * theta1/180);
+                GLfloat y4 = RADIUS * sin(M_PI * phi2/180) * cos(M_PI * theta1/180);
+                GLfloat z4 = RADIUS * cos(M_PI * phi2/180);
+
+                
+                glVertex3f(x1, y1, z1);
+                glVertex3f(x2, y2, z2);
+                glVertex3f(x3, y3, z3);
+                glVertex3f(x4, y4, z4);
+
+            }
+        }
+    glEnd();
+    glRotatef(-90.0f ,0.0f, 1.0f, 0.0f);
+
+
+    glRotatef(-90.0f ,0.0f, 1.0f, 0.0f);
+    glColor3f(0.0f, 1.0f, 1.0f);
+    glBegin(GL_QUADS);
+        for(int row = 0; row < SUBDIVISION; row++){
+            for(int col = 0; col < SUBDIVISION; col++){
+                GLfloat theta1 = 45 + row * (90 / SUBDIVISION);
+                GLfloat theta2 = 45 + (row+1) * (90 / SUBDIVISION);
+                GLfloat phi1 = -45 + col * (90 / SUBDIVISION);
+                GLfloat phi2 = -45 + (col+1) * (90 / SUBDIVISION);
+
+                GLfloat x1 = RADIUS * sin(M_PI * phi1/180) * cos(M_PI * theta1/180);
+                GLfloat y1 = RADIUS * sin(M_PI * phi1/180) * cos(M_PI * theta1/180);
+                GLfloat z1 = RADIUS * cos(M_PI * phi1/180);
+
+                GLfloat x2 = RADIUS * sin(M_PI * phi1/180) * cos(M_PI * theta2/180);
+                GLfloat y2 = RADIUS * sin(M_PI * phi1/180) * cos(M_PI * theta2/180);
+                GLfloat z2 = RADIUS * cos(M_PI * phi1/180);
+
+                GLfloat x3 = RADIUS * sin(M_PI * phi2/180) * cos(M_PI * theta2/180);
+                GLfloat y3 = RADIUS * sin(M_PI * phi2/180) * cos(M_PI * theta2/180);
+                GLfloat z3 = RADIUS * cos(M_PI * phi2/180);
+
+                GLfloat x4 = RADIUS * sin(M_PI * phi2/180) * cos(M_PI * theta1/180);
+                GLfloat y4 = RADIUS * sin(M_PI * phi2/180) * cos(M_PI * theta1/180);
+                GLfloat z4 = RADIUS * cos(M_PI * phi2/180);
+
+                
+                glVertex3f(x1, y1, z1);
+                glVertex3f(x2, y2, z2);
+                glVertex3f(x3, y3, z3);
+                glVertex3f(x4, y4, z4);
+
+            }
+        }
+    glEnd();
+    glRotatef(90.0f ,0.0f, 1.0f, 0.0f);
+   /*
+    glBegin(GL_QUADS);
+        glColor3f(0.0f, 1.0f, 1.0f);
+        glVertex3f(0.0f, 0.0f, 0.0f);
+        glVertex3f(0.0f, 0.5f, 0.0f);
+        glVertex3f(0.5f, 0.5f, 0.0f);
+        glVertex3f(0.5f, 0.0f, 0.0f);
+
+        glColor3f(1.0f, 0.0f, 1.0f);
+        glVertex3f(0.5f, 0.0f, 0.0f);
+        glVertex3f(0.7f, 0.0f, 0.2f);
+        glVertex3f(0.7f, 0.5f, 0.2f);
+        glVertex3f(0.5f, 0.5f, 0.0f);
+    glEnd();
+    */
+
+    // vertex: 0.5 0.5 0.707107
+    // vertex: 0.415627 0.415627 0.707107
+    // vertex: 0.475528 0.475528 0.587785
+    // vertex: 0.572061 0.572061 0.587785
+    // glBegin(GL_QUADS);
+    //     glColor3f(1.0f, 0.0f, 1.0f);
+    //     glVertex3f(0.5f, 0.5f, 0.707107f);
+    //     glVertex3f(0.415627f, 0.415627f, 0.707107f);
+    //     glVertex3f(0.475528f, 0.475528f, 0.587785f);
+    //     glVertex3f(0.572061f, 0.572061f, 0.587785f);
+    // glEnd();
+
+    // glBegin(GL_LINES);
+    //     glVertex3f(0.0f, 0.0f, 0.0f);
+    //     glVertex3f(1.0f, 1.0f, 1.0f);
+    // glEnd();
 
     glFlush();
 }
