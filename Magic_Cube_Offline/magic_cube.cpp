@@ -13,7 +13,7 @@ int main(int argc, char** argv){
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
     glutInitWindowSize(1000, 1000);
     glutInitWindowPosition(100, 100);
-    glutCreateWindow("1 Test");
+    glutCreateWindow("Magic Cube");
     glEnable(GL_DEPTH_TEST);
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
