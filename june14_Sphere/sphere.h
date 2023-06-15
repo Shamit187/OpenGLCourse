@@ -1,55 +1,12 @@
+#pragma once
+
 #include <iostream>
 #include <GL/glut.h>
 #include <vector>
 #include <cmath>
-#define SUBDIVISION 4
-GLfloat angleY = 0.0f;
-GLfloat angleZ = 0.0f;
-GLfloat zoom = 1.0f;
+#include "sharedData.h"
 
-void keyboard(unsigned char key, int x, int y)
-{
-    switch (key)
-    {
-        case 'q': // Rotate the object when 'r' key is pressed
-        case 'Q':
-            angleY -= 10.0f;
-            glutPostRedisplay(); // Mark the window for redrawing
-            break;
-        case 'e': // Rotate the object when 'r' key is pressed
-        case 'E':
-            angleY += 10.0f;
-            glutPostRedisplay(); // Mark the window for redrawing
-            break;
-        case 'i': // Rotate the object when 'r' key is pressed
-        case 'I':
-            angleZ -= 10.0f;
-            glutPostRedisplay(); // Mark the window for redrawing
-            break;
-        case 'p': // Rotate the object when 'r' key is pressed
-        case 'P':
-            angleZ += 10.0f;
-            glutPostRedisplay(); // Mark the window for redrawing
-            break;
-        case '-': // Zoom out when '-' key is pressed
-            zoom += 0.1f;
-            glutPostRedisplay(); // Mark the window for redrawing
-            break;
-        case '+': // Zoom in when '+' key is pressed
-        case '=':
-            zoom -= 0.1f;
-            if (zoom < 0.1f)
-                zoom = 0.1f;
-            glutPostRedisplay(); // Mark the window for redrawing
-            break;
-        case 27: // ESC key
-            exit(0); // Exit the program
-            break;
-    }
-}
 
-// generate vertices for +X face only by intersecting 2 circular planes
-// (longitudinal and latitudinal) at the given longitude/latitude angles
 std::vector<float> buildUnitPositiveX(int subdivision)
 {
     const float DEG2RAD = acos(-1) / 180.0f;
@@ -147,9 +104,7 @@ std::vector<float> buildQuadsFromVertices(const std::vector<float>& vertices, in
     return quads;
 }
 
-void generateSphereSide(){
-    auto list_of_vertex = buildUnitPositiveX(SUBDIVISION);
-    auto list_of_quad = buildQuadsFromVertices(list_of_vertex, SUBDIVISION);
+void generateSphereSide(const std::vector<float>& list_of_quad){
     auto size = list_of_quad.size();
 
 
@@ -162,84 +117,14 @@ void generateSphereSide(){
     glEnd();
 }
 
-void drawAxes()
-{
-    glLineWidth(2.0); // Set the line width for the axes
 
-    // X-axis (red color)
-    glColor3f(1.0, 0.0, 0.0);
-    glBegin(GL_LINES);
-    glVertex3f(0.0, 0.0, 0.0);
-    glVertex3f(1.0, 0.0, 0.0);
-    glEnd();
-
-    // Y-axis (green color)
-    glColor3f(0.0, 1.0, 0.0);
-    glBegin(GL_LINES);
-    glVertex3f(0.0, 0.0, 0.0);
-    glVertex3f(0.0, 1.0, 0.0);
-    glEnd();
-
-    // Z-axis (blue color)
-    glColor3f(0.0, 0.0, 1.0);
-    glBegin(GL_LINES);
-    glVertex3f(0.0, 0.0, 0.0);
-    glVertex3f(0.0, 0.0, 1.0);
-    glEnd();
-}
-
-void reshape(int width, int height)
-{
-    glViewport(0, 0, width, height);  // Set the viewport to the new dimensions
-
-    // glMatrixMode(GL_PROJECTION);     // Switch to the projection matrix
-    // glLoadIdentity();                // Reset the projection matrix
-
-    // Set the perspective projection
-    // gluPerspective(45.0, (double)width / height, 0.1, 100.0);
-
-    glMatrixMode(GL_MODELVIEW);      // Switch back to the modelview matrix
-    glLoadIdentity();                // Reset the modelview matrix
-}
-
-void display(){
-
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glLoadIdentity();
-    glScalef(zoom, zoom, zoom);
-
-    //z rotation
-    glRotatef(angleY, 0.0f, 1.0f, 0.0f); 
-    //up-down rotation
-    glRotatef(angleZ, 1.0f, 0.0f, 0.0f);
-
-    drawAxes();
-    
-    // X
-    glColor3d(1.0f,0.0f,0.0f);
-    generateSphereSide();
-    glRotatef(180.0f ,0.0f, 0.0f, 1.0f);
-    generateSphereSide();
-    glRotatef(-180.0f ,0.0f, 0.0f, 1.0f);
-
-    // Y
-    glColor3d(0.0f,0.7f,0.7f);
-    glRotatef(90.0f ,0.0f, 0.0f, 1.0f);
-    generateSphereSide();
-    glRotatef(-180.0f ,0.0f, 0.0f, 1.0f);
-    generateSphereSide();
-    glRotatef(90.0f ,0.0f, 0.0f, 1.0f);
-
-    // Z
-    glColor3d(0.0f,0.0f,1.0f);
-    glRotatef(90.0f ,0.0f, 1.0f, 0.0f);
-    generateSphereSide();
-    glRotatef(-180.0f ,0.0f, 1.0f, 0.0f);
-    generateSphereSide();
-    glRotatef(90.0f ,0.0f, 1.0f, 0.0f);
-
-    
-
-    glFlush();
-    glutSwapBuffers();
+void drawSphere(const std::vector<float>& list_of_quad, GLfloat* scale, GLfloat* translate, GLfloat* rotate, GLfloat* color){
+    glRotatef(rotate[0], rotate[1], rotate[2], rotate[3]);
+    glTranslatef(translate[0], translate[1], translate[2]);
+    glScalef(scale[0], scale[1], scale[2]);
+    glColor3f(color[0], color[1], color[2]);
+    generateSphereSide(list_of_quad);
+    glScalef(1/scale[0], 1/scale[1], 1/scale[2]);
+    glTranslatef(-translate[0], -translate[1], -translate[2]);
+    glRotatef(-rotate[0], rotate[1], rotate[2], rotate[3]);
 }
