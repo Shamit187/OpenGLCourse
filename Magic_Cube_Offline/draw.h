@@ -118,6 +118,135 @@ void display(){
     drawSphere(list_of_quad, scale, translate, rotate, color);
     bufferClear(scale, translate, rotate, color);
 
+
+    GLfloat magic = 0.58 - 0.58*moveSphereSide;
+
+    //one
+    glColor3f(1.0f, 1.0f, 0.0f);
+    glTranslatef(magic,magic,magic);
+    glScalef(1-scaleSphere,1-scaleSphere,1-scaleSphere);
+
+    glBegin(GL_TRIANGLES);
+        glVertex3f(1.0f, 0.0f, 0.0f);
+        glVertex3f(0.0f, 1.0f, 0.0f);
+        glVertex3f(0.0f, 0.0f, 1.0f);
+    glEnd();
+
+    glScalef(1/(1-scaleSphere),1/(1-scaleSphere),1/(1-scaleSphere));
+    glTranslatef(-magic,-magic,-magic);
+    
+    //two
+    glColor3f(1.0f, 0.5f, 0.0f);
+    glRotatef(90.0f, 0.0f, 0.0f , 1.0f);
+    glTranslatef(magic,magic,magic);
+    glScalef(1-scaleSphere,1-scaleSphere,1-scaleSphere);
+
+    glBegin(GL_TRIANGLES);
+        glVertex3f(1.0f, 0.0f, 0.0f);
+        glVertex3f(0.0f, 1.0f, 0.0f);
+        glVertex3f(0.0f, 0.0f, 1.0f);
+    glEnd();
+
+    glScalef(1/(1-scaleSphere),1/(1-scaleSphere),1/(1-scaleSphere));
+    glTranslatef(-magic,-magic,-magic);
+    glRotatef(-90.0f, 0.0f, 0.0f , 1.0f);
+
+    //three
+    glColor3f(1.0f, 1.0f, 0.0f);
+    glRotatef(180.0f, 0.0f, 0.0f , 1.0f);
+    glTranslatef(magic,magic,magic);
+    glScalef(1-scaleSphere,1-scaleSphere,1-scaleSphere);
+
+    glBegin(GL_TRIANGLES);
+        glVertex3f(1.0f, 0.0f, 0.0f);
+        glVertex3f(0.0f, 1.0f, 0.0f);
+        glVertex3f(0.0f, 0.0f, 1.0f);
+    glEnd();
+
+    glScalef(1/(1-scaleSphere),1/(1-scaleSphere),1/(1-scaleSphere));
+    glTranslatef(-magic,-magic,-magic);
+    glRotatef(-180.0f, 0.0f, 0.0f , 1.0f);
+
+    //four
+    glColor3f(1.0f, 0.5f, 0.0f);
+    glRotatef(270.0f, 0.0f, 0.0f , 1.0f);
+    glTranslatef(magic,magic,magic);
+    glScalef(1-scaleSphere,1-scaleSphere,1-scaleSphere);
+
+    glBegin(GL_TRIANGLES);
+        glVertex3f(1.0f, 0.0f, 0.0f);
+        glVertex3f(0.0f, 1.0f, 0.0f);
+        glVertex3f(0.0f, 0.0f, 1.0f);
+    glEnd();
+
+    glScalef(1/(1-scaleSphere),1/(1-scaleSphere),1/(1-scaleSphere));
+    glTranslatef(-magic,-magic,-magic);
+    glRotatef(-270.0f, 0.0f, 0.0f , 1.0f);
+
+    glRotatef(180.0f, 0.0f, 1.0f , 0.0f);
+    
+    //one
+    glColor3f(1.0f, 1.0f, 0.0f);
+    glTranslatef(magic,magic,magic);
+    glScalef(1-scaleSphere,1-scaleSphere,1-scaleSphere);
+
+    glBegin(GL_TRIANGLES);
+        glVertex3f(1.0f, 0.0f, 0.0f);
+        glVertex3f(0.0f, 1.0f, 0.0f);
+        glVertex3f(0.0f, 0.0f, 1.0f);
+    glEnd();
+
+    glScalef(1/(1-scaleSphere),1/(1-scaleSphere),1/(1-scaleSphere));
+    glTranslatef(-magic,-magic,-magic);
+    
+    //two
+    glColor3f(1.0f, 0.5f, 0.0f);
+    glRotatef(90.0f, 0.0f, 0.0f , 1.0f);
+    glTranslatef(magic,magic,magic);
+    glScalef(1-scaleSphere,1-scaleSphere,1-scaleSphere);
+
+    glBegin(GL_TRIANGLES);
+        glVertex3f(1.0f, 0.0f, 0.0f);
+        glVertex3f(0.0f, 1.0f, 0.0f);
+        glVertex3f(0.0f, 0.0f, 1.0f);
+    glEnd();
+
+    glScalef(1/(1-scaleSphere),1/(1-scaleSphere),1/(1-scaleSphere));
+    glTranslatef(-magic,-magic,-magic);
+    glRotatef(-90.0f, 0.0f, 0.0f , 1.0f);
+
+    //three
+    glColor3f(1.0f, 1.0f, 0.0f);
+    glRotatef(180.0f, 0.0f, 0.0f , 1.0f);
+    glTranslatef(magic,magic,magic);
+    glScalef(1-scaleSphere,1-scaleSphere,1-scaleSphere);
+
+    glBegin(GL_TRIANGLES);
+        glVertex3f(1.0f, 0.0f, 0.0f);
+        glVertex3f(0.0f, 1.0f, 0.0f);
+        glVertex3f(0.0f, 0.0f, 1.0f);
+    glEnd();
+
+    glScalef(1/(1-scaleSphere),1/(1-scaleSphere),1/(1-scaleSphere));
+    glTranslatef(-magic,-magic,-magic);
+    glRotatef(-180.0f, 0.0f, 0.0f , 1.0f);
+
+    //four
+    glColor3f(1.0f, 0.5f, 0.0f);
+    glRotatef(270.0f, 0.0f, 0.0f , 1.0f);
+    glTranslatef(magic,magic,magic);
+    glScalef(1-scaleSphere,1-scaleSphere,1-scaleSphere);
+
+    glBegin(GL_TRIANGLES);
+        glVertex3f(1.0f, 0.0f, 0.0f);
+        glVertex3f(0.0f, 1.0f, 0.0f);
+        glVertex3f(0.0f, 0.0f, 1.0f);
+    glEnd();
+
+    glScalef(1/(1-scaleSphere),1/(1-scaleSphere),1/(1-scaleSphere));
+    glTranslatef(-magic,-magic,-magic);
+    glRotatef(-270.0f, 0.0f, 0.0f , 1.0f);
+
     glFlush();
     glutSwapBuffers();
 }
