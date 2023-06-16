@@ -5,6 +5,7 @@
 #include <vector>
 #include <cmath>
 #include "sharedData.h"
+#include "utility.h"
 
 
 std::vector<float> buildUnitPositiveX(int subdivision)
@@ -127,4 +128,59 @@ void drawSphere(const std::vector<float>& list_of_quad, GLfloat* scale, GLfloat*
     glScalef(1/scale[0], 1/scale[1], 1/scale[2]);
     glTranslatef(-translate[0], -translate[1], -translate[2]);
     glRotatef(-rotate[0], rotate[1], rotate[2], rotate[3]);
+}
+
+void drawSphere(){
+    auto list_of_vertex = buildUnitPositiveX(SUBDIVISION);
+    auto list_of_quad = buildQuadsFromVertices(list_of_vertex, SUBDIVISION);
+    GLfloat color[3] = {1.0f, 1.0f, 1.0f};
+    GLfloat scale[3] = {1.0f, 1.0f, 1.0f};
+    GLfloat translate[3] = {0.0f, 0.0f, 0.0f};
+    GLfloat rotate[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+
+    // X
+    translate[0] += moveSphereSide;
+    scale[0] *= scaleSphere; scale[1] *= scaleSphere; scale[2] *= scaleSphere;
+    color[0] = 1.0f; color[1] = 0.0f; color[2] = 0.0f;
+    drawSphere(list_of_quad, scale, translate, rotate, color);
+    bufferClear(scale, translate, rotate, color);
+
+    translate[0] += moveSphereSide;
+    scale[0] *= scaleSphere; scale[1] *= scaleSphere; scale[2] *= scaleSphere;
+    color[0] = 1.0f; color[1] = 0.0f; color[2] = 0.0f;
+    rotate[0] = 180.0f; rotate[1] = 0.0f; rotate[2] = 0.0f; rotate[3] = 1.0f;
+    drawSphere(list_of_quad, scale, translate, rotate, color);
+    bufferClear(scale, translate, rotate, color);
+
+
+    // Y
+    translate[0] += moveSphereSide;
+    scale[0] *= scaleSphere; scale[1] *= scaleSphere; scale[2] *= scaleSphere;
+    color[0] = 0.0f; color[1] = 5.0f; color[2] = 5.0f;
+    rotate[0] = 90.0f; rotate[1] = 0.0f; rotate[2] = 0.0f; rotate[3] = 1.0f;
+    drawSphere(list_of_quad, scale, translate, rotate, color);
+    bufferClear(scale, translate, rotate, color);
+
+    translate[0] += moveSphereSide;
+    scale[0] *= scaleSphere; scale[1] *= scaleSphere; scale[2] *= scaleSphere;
+    color[0] = 0.0f; color[1] = 5.0f; color[2] = 5.0f;
+    rotate[0] = -90.0f; rotate[1] = 0.0f; rotate[2] = 0.0f; rotate[3] = 1.0f;
+    drawSphere(list_of_quad, scale, translate, rotate, color);
+    bufferClear(scale, translate, rotate, color);
+
+
+    // Z
+    translate[0] += moveSphereSide;
+    scale[0] *= scaleSphere; scale[1] *= scaleSphere; scale[2] *= scaleSphere;
+    color[0] = 0.0f; color[1] = 0.0f; color[2] = 1.0f;
+    rotate[0] = 90.0f; rotate[1] = 0.0f; rotate[2] = 1.0f; rotate[3] = 0.0f;
+    drawSphere(list_of_quad, scale, translate, rotate, color);
+    bufferClear(scale, translate, rotate, color);
+
+    translate[0] += moveSphereSide;
+    scale[0] *= scaleSphere; scale[1] *= scaleSphere; scale[2] *= scaleSphere;
+    color[0] = 0.0f; color[1] = 0.0f; color[2] = 1.0f;
+    rotate[0] = -90.0f; rotate[1] = 0.0f; rotate[2] = 1.0f; rotate[3] = 0.0f;
+    drawSphere(list_of_quad, scale, translate, rotate, color);
+    bufferClear(scale, translate, rotate, color);
 }

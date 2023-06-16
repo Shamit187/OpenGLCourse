@@ -6,6 +6,8 @@
 #include <cmath>
 #include "sharedData.h"
 #include "sphere.h"
+#include "octahedron.h"
+#include "utility.h"
 
 void drawAxes()
 {
@@ -47,12 +49,7 @@ void reshape(int width, int height)
     glLoadIdentity();                // Reset the modelview matrix
 }
 
-void bufferClear(GLfloat* scale, GLfloat* translate, GLfloat* rotate, GLfloat* color){
-    scale[0] = 1.0f; scale[1] = 1.0f; scale[2] = 1.0f;
-    translate[0] = 0.0f; translate[1] = 0.0f; translate[2] = 0.0f;
-    rotate[0] = 0.0f; rotate[1] = 0.0f; rotate[2] = 0.0f; rotate[3] = 0.0f;
-    color[0] = 1.0f; color[1] = 1.0f; color[2] = 1.0f;
-}
+
 
 void display(){
     auto list_of_vertex = buildUnitPositiveX(SUBDIVISION);
@@ -72,180 +69,10 @@ void display(){
     glRotatef(angleZ, 1.0f, 0.0f, 0.0f);
 
     //sphere generation
-    // X
-    translate[0] += moveSphereSide;
-    scale[0] *= scaleSphere; scale[1] *= scaleSphere; scale[2] *= scaleSphere;
-    color[0] = 1.0f; color[1] = 0.0f; color[2] = 0.0f;
-    drawSphere(list_of_quad, scale, translate, rotate, color);
-    bufferClear(scale, translate, rotate, color);
+    drawSphere();
 
-    translate[0] += moveSphereSide;
-    scale[0] *= scaleSphere; scale[1] *= scaleSphere; scale[2] *= scaleSphere;
-    color[0] = 1.0f; color[1] = 0.0f; color[2] = 0.0f;
-    rotate[0] = 180.0f; rotate[1] = 0.0f; rotate[2] = 0.0f; rotate[3] = 1.0f;
-    drawSphere(list_of_quad, scale, translate, rotate, color);
-    bufferClear(scale, translate, rotate, color);
-
-
-    // Y
-    translate[0] += moveSphereSide;
-    scale[0] *= scaleSphere; scale[1] *= scaleSphere; scale[2] *= scaleSphere;
-    color[0] = 0.0f; color[1] = 5.0f; color[2] = 5.0f;
-    rotate[0] = 90.0f; rotate[1] = 0.0f; rotate[2] = 0.0f; rotate[3] = 1.0f;
-    drawSphere(list_of_quad, scale, translate, rotate, color);
-    bufferClear(scale, translate, rotate, color);
-
-    translate[0] += moveSphereSide;
-    scale[0] *= scaleSphere; scale[1] *= scaleSphere; scale[2] *= scaleSphere;
-    color[0] = 0.0f; color[1] = 5.0f; color[2] = 5.0f;
-    rotate[0] = -90.0f; rotate[1] = 0.0f; rotate[2] = 0.0f; rotate[3] = 1.0f;
-    drawSphere(list_of_quad, scale, translate, rotate, color);
-    bufferClear(scale, translate, rotate, color);
-
-
-    // Z
-    translate[0] += moveSphereSide;
-    scale[0] *= scaleSphere; scale[1] *= scaleSphere; scale[2] *= scaleSphere;
-    color[0] = 0.0f; color[1] = 0.0f; color[2] = 1.0f;
-    rotate[0] = 90.0f; rotate[1] = 0.0f; rotate[2] = 1.0f; rotate[3] = 0.0f;
-    drawSphere(list_of_quad, scale, translate, rotate, color);
-    bufferClear(scale, translate, rotate, color);
-
-    translate[0] += moveSphereSide;
-    scale[0] *= scaleSphere; scale[1] *= scaleSphere; scale[2] *= scaleSphere;
-    color[0] = 0.0f; color[1] = 0.0f; color[2] = 1.0f;
-    rotate[0] = -90.0f; rotate[1] = 0.0f; rotate[2] = 1.0f; rotate[3] = 0.0f;
-    drawSphere(list_of_quad, scale, translate, rotate, color);
-    bufferClear(scale, translate, rotate, color);
-
-
-    GLfloat magic = 0.58 - 0.58*moveSphereSide;
-
-    //one
-    glColor3f(1.0f, 1.0f, 0.0f);
-    glTranslatef(magic,magic,magic);
-    glScalef(1-scaleSphere,1-scaleSphere,1-scaleSphere);
-
-    glBegin(GL_TRIANGLES);
-        glVertex3f(1.0f, 0.0f, 0.0f);
-        glVertex3f(0.0f, 1.0f, 0.0f);
-        glVertex3f(0.0f, 0.0f, 1.0f);
-    glEnd();
-
-    glScalef(1/(1-scaleSphere),1/(1-scaleSphere),1/(1-scaleSphere));
-    glTranslatef(-magic,-magic,-magic);
-    
-    //two
-    glColor3f(1.0f, 0.5f, 0.0f);
-    glRotatef(90.0f, 0.0f, 0.0f , 1.0f);
-    glTranslatef(magic,magic,magic);
-    glScalef(1-scaleSphere,1-scaleSphere,1-scaleSphere);
-
-    glBegin(GL_TRIANGLES);
-        glVertex3f(1.0f, 0.0f, 0.0f);
-        glVertex3f(0.0f, 1.0f, 0.0f);
-        glVertex3f(0.0f, 0.0f, 1.0f);
-    glEnd();
-
-    glScalef(1/(1-scaleSphere),1/(1-scaleSphere),1/(1-scaleSphere));
-    glTranslatef(-magic,-magic,-magic);
-    glRotatef(-90.0f, 0.0f, 0.0f , 1.0f);
-
-    //three
-    glColor3f(1.0f, 1.0f, 0.0f);
-    glRotatef(180.0f, 0.0f, 0.0f , 1.0f);
-    glTranslatef(magic,magic,magic);
-    glScalef(1-scaleSphere,1-scaleSphere,1-scaleSphere);
-
-    glBegin(GL_TRIANGLES);
-        glVertex3f(1.0f, 0.0f, 0.0f);
-        glVertex3f(0.0f, 1.0f, 0.0f);
-        glVertex3f(0.0f, 0.0f, 1.0f);
-    glEnd();
-
-    glScalef(1/(1-scaleSphere),1/(1-scaleSphere),1/(1-scaleSphere));
-    glTranslatef(-magic,-magic,-magic);
-    glRotatef(-180.0f, 0.0f, 0.0f , 1.0f);
-
-    //four
-    glColor3f(1.0f, 0.5f, 0.0f);
-    glRotatef(270.0f, 0.0f, 0.0f , 1.0f);
-    glTranslatef(magic,magic,magic);
-    glScalef(1-scaleSphere,1-scaleSphere,1-scaleSphere);
-
-    glBegin(GL_TRIANGLES);
-        glVertex3f(1.0f, 0.0f, 0.0f);
-        glVertex3f(0.0f, 1.0f, 0.0f);
-        glVertex3f(0.0f, 0.0f, 1.0f);
-    glEnd();
-
-    glScalef(1/(1-scaleSphere),1/(1-scaleSphere),1/(1-scaleSphere));
-    glTranslatef(-magic,-magic,-magic);
-    glRotatef(-270.0f, 0.0f, 0.0f , 1.0f);
-
-    glRotatef(180.0f, 0.0f, 1.0f , 0.0f);
-    
-    //one
-    glColor3f(1.0f, 1.0f, 0.0f);
-    glTranslatef(magic,magic,magic);
-    glScalef(1-scaleSphere,1-scaleSphere,1-scaleSphere);
-
-    glBegin(GL_TRIANGLES);
-        glVertex3f(1.0f, 0.0f, 0.0f);
-        glVertex3f(0.0f, 1.0f, 0.0f);
-        glVertex3f(0.0f, 0.0f, 1.0f);
-    glEnd();
-
-    glScalef(1/(1-scaleSphere),1/(1-scaleSphere),1/(1-scaleSphere));
-    glTranslatef(-magic,-magic,-magic);
-    
-    //two
-    glColor3f(1.0f, 0.5f, 0.0f);
-    glRotatef(90.0f, 0.0f, 0.0f , 1.0f);
-    glTranslatef(magic,magic,magic);
-    glScalef(1-scaleSphere,1-scaleSphere,1-scaleSphere);
-
-    glBegin(GL_TRIANGLES);
-        glVertex3f(1.0f, 0.0f, 0.0f);
-        glVertex3f(0.0f, 1.0f, 0.0f);
-        glVertex3f(0.0f, 0.0f, 1.0f);
-    glEnd();
-
-    glScalef(1/(1-scaleSphere),1/(1-scaleSphere),1/(1-scaleSphere));
-    glTranslatef(-magic,-magic,-magic);
-    glRotatef(-90.0f, 0.0f, 0.0f , 1.0f);
-
-    //three
-    glColor3f(1.0f, 1.0f, 0.0f);
-    glRotatef(180.0f, 0.0f, 0.0f , 1.0f);
-    glTranslatef(magic,magic,magic);
-    glScalef(1-scaleSphere,1-scaleSphere,1-scaleSphere);
-
-    glBegin(GL_TRIANGLES);
-        glVertex3f(1.0f, 0.0f, 0.0f);
-        glVertex3f(0.0f, 1.0f, 0.0f);
-        glVertex3f(0.0f, 0.0f, 1.0f);
-    glEnd();
-
-    glScalef(1/(1-scaleSphere),1/(1-scaleSphere),1/(1-scaleSphere));
-    glTranslatef(-magic,-magic,-magic);
-    glRotatef(-180.0f, 0.0f, 0.0f , 1.0f);
-
-    //four
-    glColor3f(1.0f, 0.5f, 0.0f);
-    glRotatef(270.0f, 0.0f, 0.0f , 1.0f);
-    glTranslatef(magic,magic,magic);
-    glScalef(1-scaleSphere,1-scaleSphere,1-scaleSphere);
-
-    glBegin(GL_TRIANGLES);
-        glVertex3f(1.0f, 0.0f, 0.0f);
-        glVertex3f(0.0f, 1.0f, 0.0f);
-        glVertex3f(0.0f, 0.0f, 1.0f);
-    glEnd();
-
-    glScalef(1/(1-scaleSphere),1/(1-scaleSphere),1/(1-scaleSphere));
-    glTranslatef(-magic,-magic,-magic);
-    glRotatef(-270.0f, 0.0f, 0.0f , 1.0f);
+    //octahedron generation
+    drawOctahedron();
 
     glFlush();
     glutSwapBuffers();
