@@ -12,29 +12,29 @@ void keyboard(unsigned char key, int x, int y)
     {
         case 'q': 
         case 'Q':
-            angleY -= 10.0f;
-            if(angleY < 0) angleY = 350;
+            angleY -= 5.0f;
+            if(angleY < 0) angleY = 355;
             glutPostRedisplay();
             break;
         
         case 'e':
         case 'E':
-            angleY += 10.0f;
-            if(angleY > 360) angleY = 10;
+            angleY += 5.0f;
+            if(angleY > 360) angleY = 5;
             glutPostRedisplay();
             break;
 
         case 'i':
         case 'I':
-            angleZ -= 10.0f;
-            if(angleZ < 0) angleZ = 350;
+            angleZ -= 5.0f;
+            if(angleZ < 0) angleZ = 355;
             glutPostRedisplay();
             break;
             
         case 'p':
         case 'P':
-            angleZ += 10.0f;
-            if(angleZ > 360) angleZ = 10;
+            angleZ += 5.0f;
+            if(angleZ > 360) angleZ = 5;
             glutPostRedisplay();
             break;
 

@@ -8,6 +8,7 @@
 #include "sphere.h"
 #include "octahedron.h"
 #include "utility.h"
+#include "cylinder.h"
 
 void drawAxes()
 {
@@ -73,6 +74,22 @@ void display(){
 
     //octahedron generation
     drawOctahedron();
+
+    //cylinder generation
+    //observations:
+    //initially
+    //h -> 0
+    //r -> 1
+    //t(x) -> 0
+    //
+    //process
+    //h -> inc
+    //r -> dec
+    //t(x) -> inc
+    GLfloat magicNumber2 = 1.415f;
+    glRotatef(45.0f, 0.0f, 0.0f, 1.0f);
+    glTranslatef((1 / magicNumber2 )*moveSphereSide,0.0f,0.0f);
+    drawCylinder(SUBDIVISION * 10, scaleSphere, magicNumber2* moveSphereSide);
 
     glFlush();
     glutSwapBuffers();
