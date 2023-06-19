@@ -40,12 +40,6 @@ void reshape(int width, int height)
 {
     glViewport(0, 0, width, height);  // Set the viewport to the new dimensions
 
-    // glMatrixMode(GL_PROJECTION);     // Switch to the projection matrix
-    // glLoadIdentity();                // Reset the projection matrix
-
-    // Set the perspective projection
-    // gluPerspective(45.0, (double)width / height, 0.1, 100.0);
-
     glMatrixMode(GL_MODELVIEW);      // Switch back to the modelview matrix
     glLoadIdentity();                // Reset the modelview matrix
 }
@@ -53,13 +47,6 @@ void reshape(int width, int height)
 
 
 void display(){
-    auto list_of_vertex = buildUnitPositiveX(SUBDIVISION);
-    auto list_of_quad = buildQuadsFromVertices(list_of_vertex, SUBDIVISION);
-    GLfloat color[3] = {1.0f, 1.0f, 1.0f};
-    GLfloat scale[3] = {1.0f, 1.0f, 1.0f};
-    GLfloat translate[3] = {0.0f, 0.0f, 0.0f};
-    GLfloat rotate[4] = {0.0f, 0.0f, 0.0f, 0.0f};
-
     //init
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
@@ -68,6 +55,8 @@ void display(){
     glScalef(zoom, zoom, zoom);
     glRotatef(angleY, 0.0f, 1.0f, 0.0f); 
     glRotatef(angleZ, 1.0f, 0.0f, 0.0f);
+    GLfloat value = 1- 0.28* scaleSphere;
+    glScalef(value,value,value);    
 
     //sphere generation
     drawSphere();
@@ -76,21 +65,8 @@ void display(){
     drawOctahedron();
 
     //cylinder generation
-    //observations:
-    //initially
-    //h -> 0
-    //r -> 1
-    //t(x) -> 0
-    //
-    //process
-    //h -> inc
-    //r -> dec
-    //t(x) -> inc
-    GLfloat magicNumber2 = 1.415f;
-    glRotatef(45.0f, 0.0f, 0.0f, 1.0f);
-    glTranslatef((1 / magicNumber2 )*moveSphereSide,0.0f,0.0f);
-    drawCylinder(SUBDIVISION * 10, scaleSphere, magicNumber2* moveSphereSide);
-
+    drawCylinders();
+    
     glFlush();
     glutSwapBuffers();
 }

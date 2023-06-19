@@ -2,7 +2,7 @@
 
 #include <GL/glut.h>
 
-#define SUBDIVISION 5
+#define SUBDIVISION 7
 
 GLfloat angleY = 0.0f;
 GLfloat angleZ = 0.0f;
