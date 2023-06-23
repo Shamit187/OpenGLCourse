@@ -8,57 +8,110 @@
 
 void keyboard(unsigned char key, int x, int y)
 {
+    GLfloat directionx = centerx - eyex;
+    GLfloat directiony = centery - eyey;
+    GLfloat directionz = centerz - eyez;
+    GLfloat newDirectionx = 0.0f;
+    GLfloat newDirectiony = 0.0f;
+    GLfloat newDirectionz = 0.0f;
+    GLfloat cosTheta = 0.99875026039f;
+    GLfloat sinTheta = 0.04997916927f;
+
     switch (key)
     {
-        case 'q': 
-        case 'Q':
+        // Rotate Camera Left Right (Y axis based rotation)
+        case '1':
+            newDirectionx = directionx * cosTheta + directionz * sinTheta;
+            newDirectiony = directiony;
+            newDirectionz = - directionx * sinTheta + directionz * cosTheta;
+            centerx = eyex + newDirectionx;
+            centery = eyey + newDirectiony;
+            centerz = eyez + newDirectionz;
+            break;
+        case '2':
+            newDirectionx = directionx * cosTheta - directionz * sinTheta;
+            newDirectiony = directiony;
+            newDirectionz = directionx * sinTheta + directionz * cosTheta;
+            centerx = eyex + newDirectionx;
+            centery = eyey + newDirectiony;
+            centerz = eyez + newDirectionz;
+            break;
+        // Rotate Camera Up Down (X axis based rotation)
+        case '3':
+            newDirectionx = directionx;
+            newDirectiony = directiony * cosTheta + directionz * sinTheta;
+            newDirectionz = - directiony * sinTheta + directionz * cosTheta;
+            centerx = eyex + newDirectionx;
+            centery = eyey + newDirectiony;
+            centerz = eyez + newDirectionz;
+            break;
+        case '4':
+            newDirectionx = directionx;
+            newDirectiony = directiony * cosTheta - directionz * sinTheta;
+            newDirectionz = directiony * sinTheta + directionz * cosTheta;
+            centerx = eyex + newDirectionx;
+            centery = eyey + newDirectiony;
+            centerz = eyez + newDirectionz;
+            break;
+        // Rotate Camera look axis. (Z axis based rotation)
+        case '5':
+            newDirectionx = upx * cosTheta + upy * sinTheta;
+            newDirectiony = - upx * sinTheta + upy * cosTheta;
+            upx = newDirectionx;
+            upy = newDirectiony;
+            break;
+        case '6':
+            newDirectionx = upx * cosTheta - upy * sinTheta;
+            newDirectiony = upx * sinTheta + upy * cosTheta;
+            upx = newDirectionx;
+            upy = newDirectiony;
+            break;
+
+        // Control Object Mobement
+        case 'a': 
+        case 'A':
             angleY -= 5.0f;
             if(angleY < 0) angleY = 355;
-            glutPostRedisplay();
             break;
         
-        case 'e':
-        case 'E':
+        case 'd':
+        case 'D':
             angleY += 5.0f;
             if(angleY > 360) angleY = 5;
-            glutPostRedisplay();
             break;
 
         case 'i':
         case 'I':
             angleZ -= 5.0f;
             if(angleZ < 0) angleZ = 355;
-            glutPostRedisplay();
             break;
             
         case 'p':
         case 'P':
             angleZ += 5.0f;
             if(angleZ > 360) angleZ = 5;
-            glutPostRedisplay();
             break;
 
+        // Control Camera zoom in and zoom out
         case '-': 
         case '_': 
             zoom += 0.1f;
             if (zoom > 2.0f) zoom = 2.0f;
-            glutPostRedisplay();
             break;
 
         case '+': 
         case '=':
             zoom -= 0.1f;
             if (zoom < 0.1f) zoom = 0.1f;
-            glutPostRedisplay();
             break;
 
+        // Control Object morphing
         case '.': 
         case '>': 
             if (scaleSphere <= 0.01f) break;
 
             scaleSphere -= 0.01f;
             moveSphereSide += 0.01f;
-            glutPostRedisplay();
             break;
 
         case ',': 
@@ -69,11 +122,38 @@ void keyboard(unsigned char key, int x, int y)
             moveSphereSide -= 0.01f;
             scaleSphere += 0.01f;
 
-            glutPostRedisplay();
             break;
 
         case 27: // ESC key
             exit(0); // Exit the program
             break;
     }
+    glutPostRedisplay();
+}
+
+void specialKey(int key, int x,int y) {
+
+    GLfloat controlSpeed = 0.05;
+    switch (key) {
+        case GLUT_KEY_LEFT:
+            eyex -= controlSpeed;
+            break;
+        case GLUT_KEY_RIGHT:
+            eyex += controlSpeed;
+            break;
+        case GLUT_KEY_UP:
+            eyez += controlSpeed;
+            break;
+        case GLUT_KEY_DOWN:
+            eyez -= controlSpeed;
+            break;
+        case GLUT_KEY_PAGE_DOWN:
+            eyey += controlSpeed;
+            break;
+        case GLUT_KEY_PAGE_UP:
+            eyey -= controlSpeed;
+        default:
+            return;
+    }
+    glutPostRedisplay();    // Post a paint request to activate display()
 }
