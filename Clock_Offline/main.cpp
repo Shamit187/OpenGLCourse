@@ -48,18 +48,18 @@ void drawClock(GLfloat hour, GLfloat minute, GLfloat second)
     for (int i = 0; i < 360; i += 1){
         float theta1 = i * PI / 180.0;
         float theta2 = (i + 1) * PI / 180.0;
-        glColor3f(0, 0, 0);
+        glColor3f(0.8f, 0.8f, 0.8f);
         glVertex2f(0.5 * cos(theta1), 0.5 * sin(theta1));
         glVertex2f(0.5 * cos(theta2), 0.5 * sin(theta2));
-        glColor3f(0.8f, 0.8f, 0.8f);
+        glColor3f(0, 0, 0);
         glVertex2f(0, 0);
     }
     glEnd();
 
-    glLineWidth(3.0);
+    glLineWidth(10.0);
     glColor3f(1.0f, 1.0f, 1.0f);
-    glBegin(GL_LINES);
-    for (int i = 0; i < 360; i += 1)
+    glBegin(GL_LINE_LOOP);
+    for (int i = 0; i < 360; i += 6)
     {
         float theta1 = i * PI / 180.0;
         float theta2 = (i + 1) * PI / 180.0;
@@ -68,18 +68,8 @@ void drawClock(GLfloat hour, GLfloat minute, GLfloat second)
     }
     glEnd();
 
-    glColor3f(1.0f, 1.0f, 1.0f);
-    glBegin(GL_LINES);
-    for (int i = 0; i < 360; i += 1)
-    {
-        float theta1 = i * PI / 180.0;
-        float theta2 = (i + 1) * PI / 180.0;
-        glVertex2f(0.49 * cos(theta1), 0.49 * sin(theta1));
-        glVertex2f(0.49 * cos(theta2), 0.49 * sin(theta2));
-    }
-    glEnd();
-
     // Draw the minute notch
+    glLineWidth(3.0);
     glBegin(GL_LINES);
     for (int i = 0; i < 360; i += 6)
     {

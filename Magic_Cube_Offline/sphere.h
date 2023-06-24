@@ -68,22 +68,15 @@ std::vector<float> buildUnitPositiveX(int subdivision)
 std::vector<float> buildQuadsFromVertices(const std::vector<float>& vertices, int subdivision)
 {
     std::vector<float> quads;
-
-    // compute the number of vertices per row, 2^n + 1
     int pointsPerRow = (int)pow(2, subdivision) + 1;
-
-    // iterate over the vertices to create quads
-    for (unsigned int i = 0; i < pointsPerRow - 1; ++i)
-    {
-        for (unsigned int j = 0; j < pointsPerRow - 1; ++j)
-        {
-            // calculate indices of the current quad
+    
+    for (unsigned int i = 0; i < pointsPerRow - 1; ++i){
+        for (unsigned int j = 0; j < pointsPerRow - 1; ++j){
             int index1 = i * pointsPerRow + j;
             int index2 = index1 + 1;
             int index3 = (i + 1) * pointsPerRow + j;
             int index4 = index3 + 1;
 
-            // add the vertices of the quad to the quad vector
             quads.push_back(vertices[3 * index1]);
             quads.push_back(vertices[3 * index1 + 1]);
             quads.push_back(vertices[3 * index1 + 2]);

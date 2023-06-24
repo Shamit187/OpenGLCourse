@@ -137,21 +137,27 @@ void specialKey(int key, int x,int y) {
     switch (key) {
         case GLUT_KEY_LEFT:
             eyex -= controlSpeed;
+            centerx -= controlSpeed;
             break;
         case GLUT_KEY_RIGHT:
             eyex += controlSpeed;
+            centerx += controlSpeed;
             break;
         case GLUT_KEY_UP:
             eyez += controlSpeed;
+            centerz += controlSpeed;
             break;
         case GLUT_KEY_DOWN:
             eyez -= controlSpeed;
+            centerz -= controlSpeed;
             break;
         case GLUT_KEY_PAGE_DOWN:
             eyey += controlSpeed;
+            centery += controlSpeed;
             break;
         case GLUT_KEY_PAGE_UP:
             eyey -= controlSpeed;
+            centery -= controlSpeed;
         default:
             return;
     }
