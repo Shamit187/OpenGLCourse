@@ -158,7 +158,7 @@ void keyboard(unsigned char key, int x, int y)
 
 void specialKey(int key, int x,int y) {
 
-    GLfloat controlSpeed = 0.05;
+    GLfloat controlSpeed = 0.08;
     switch (key) {
         case GLUT_KEY_LEFT:
             eyex += controlSpeed;

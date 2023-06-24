@@ -1,2 +1,2 @@
-g++ main.cpp -o demo -lglut -lGLU -lGL
-./demo
+g++ clock.cpp -o clock -lglut -lGLU -lGL
+./clock

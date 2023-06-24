@@ -81,15 +81,13 @@ void drawClock(GLfloat hour, GLfloat minute, GLfloat second)
     }
     glEnd();
 
-    glLineWidth(10.0);
+    glLineWidth(3.0);
     glColor3f(1.0f, 1.0f, 1.0f);
     glBegin(GL_LINE_LOOP);
-    for (int i = 0; i < 360; i += 6)
+    for (int i = 0; i < 360; i += 1)
     {
-        float theta1 = i * PI / 180.0;
-        float theta2 = (i + 1) * PI / 180.0;
-        glVertex2f(0.5 * cos(theta1), 0.5 * sin(theta1));
-        glVertex2f(0.5 * cos(theta2), 0.5 * sin(theta2));
+        float theta = i * PI / 180.0;
+        glVertex2f(0.5 * cos(theta), 0.5 * sin(theta));
     }
     glEnd();
 
@@ -284,7 +282,7 @@ int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-    glutInitWindowSize(1000, 1000);
+    glutInitWindowSize(2000, 2000);
     glutCreateWindow("Analog Clock");
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
