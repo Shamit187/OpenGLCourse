@@ -104,8 +104,8 @@ void display(){
     glScalef(value,value,value); 
 
     std::cout << moveSphereSide << " " << scaleSphere << " " << std::endl;
-    // moveSphereSide = 1.0f - moveSphereSide;
-    // scaleSphere = 1.0f - scaleSphere;
+    moveSphereSide = 1.0f - moveSphereSide;
+    scaleSphere = 1.0f - scaleSphere;
       
     drawSphere();
 
@@ -114,6 +114,9 @@ void display(){
 
     //cylinder generation
     drawCylinders();
+
+    moveSphereSide = 1.0f - moveSphereSide;
+    scaleSphere = 1.0f - scaleSphere;
     
     glFlush();
     glutSwapBuffers();
