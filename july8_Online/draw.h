@@ -75,13 +75,38 @@ void display(){
 
     //object movement code
     glScalef(zoom, zoom, zoom);
+    glTranslatef(-1.0f,0,0);
     glRotatef(angleY, 0.0f, 1.0f, 0.0f); 
     glRotatef(angleZ, 1.0f, 0.0f, 0.0f);
-    
     GLfloat value = 1- 0.28* scaleSphere;
     glScalef(value,value,value);    
 
     //sphere generation
+    drawSphere();
+
+    //octahedron generation
+    drawOctahedron();
+
+    //cylinder generation
+    drawCylinders();
+    
+    glScalef(1/value,1/value,1/value);
+    glRotatef(-angleZ, 1.0f, 0.0f, 0.0f);
+    glRotatef(-angleY, 0.0f, 1.0f, 0.0f); 
+    glTranslatef(1.0f,0,0);  
+    glScalef(1/zoom, 1/zoom, 1/zoom);
+    
+    
+    glScalef(zoom, zoom, zoom);
+    glTranslatef(1.0f,0,0);
+    glRotatef(angleZ, 0.0f, 1.0f, 0.0f); 
+    glRotatef(angleY, 1.0f, 0.0f, 0.0f);
+    glScalef(value,value,value); 
+
+    std::cout << moveSphereSide << " " << scaleSphere << " " << std::endl;
+    // moveSphereSide = 1.0f - moveSphereSide;
+    // scaleSphere = 1.0f - scaleSphere;
+      
     drawSphere();
 
     //octahedron generation

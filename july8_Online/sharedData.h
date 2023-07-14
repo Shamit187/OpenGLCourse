@@ -2,7 +2,7 @@
 
 #include <GL/glut.h>
 
-#define SUBDIVISION 2
+#define SUBDIVISION 7
 #define PI 3.14159265
 
 GLfloat angleY = 0.0f;

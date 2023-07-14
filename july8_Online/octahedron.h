@@ -26,7 +26,7 @@ void drawOctahedronSide(GLfloat* color, GLfloat* rotate, GLfloat* scale, GLfloat
 }
 
 void drawOctahedronGroup(GLfloat angle, int rotation_axis){
-    GLfloat magic = OCTA_TRANSITION * (1 - moveSphereSide);
+    GLfloat magic = OCTA_TRANSITION - OCTA_TRANSITION*moveSphereSide;
     GLfloat color[3] = {1.0f, 1.0f, 1.0f};
     GLfloat scale[3] = {1.0f, 1.0f, 1.0f};
     GLfloat translate[3] = {0.0f, 0.0f, 0.0f};
